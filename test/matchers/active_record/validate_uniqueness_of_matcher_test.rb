@@ -69,6 +69,7 @@ class ValidateUniquenessOfMatcherTest < ActiveSupport::TestCase # :nodoc:
   context "a scoped unique attribute with an existing value" do
     setup do
       @model = define_model(:example, :attr   => :string,
+                                           :other => :integer,
                                            :scope1 => :integer,
                                            :scope2 => :integer) do
         validates_uniqueness_of :attr, :scope => [:scope1, :scope2]
@@ -86,8 +87,12 @@ class ValidateUniquenessOfMatcherTest < ActiveSupport::TestCase # :nodoc:
         @existing
     end
 
-    should "fail when a different scope is specified" do
+    should "fail when the specified scope is incomplete" do
       assert_rejects validate_uniqueness_of(:attr).scoped_to(:scope1), @model
+    end
+
+    should "fail when a different scope is specified" do
+      assert_rejects validate_uniqueness_of(:attr).scoped_to(:scope1, :scope2, :other), @model
     end
 
     should "fail when no scope is specified" do

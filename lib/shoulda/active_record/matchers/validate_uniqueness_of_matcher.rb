@@ -120,14 +120,17 @@ module Shoulda # :nodoc:
 
               @subject.send("#{scope}=", next_value)
 
-              if allows_value_of(existing_value, @expected_message)
+              if allows = allows_value_of(existing_value, @expected_message)
                 @negative_failure_message << 
                   " (with different value of #{scope})"
-                true
               else
                 @failure_message << " (with different value of #{scope})"
-                false
               end
+
+              # Re-assign the previous value to the scoped field
+              @subject.send("#{scope}=", previous_value)
+
+              allows
             end
           end
         end
