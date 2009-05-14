@@ -81,6 +81,12 @@ class ValidateUniquenessOfMatcherTest < ActiveSupport::TestCase # :nodoc:
         @model
     end
 
+    should "pass when duplicated values exist as long as scoped field values are different" do
+      @other = Example.create!(:attr => 'value', :scope1 => 2, :scope2 => 2)
+      assert_accepts validate_uniqueness_of(:attr).scoped_to(:scope1, :scope2),
+        @model
+    end
+
     should "pass when the subject is an existing record" do
       assert_accepts validate_uniqueness_of(:attr).scoped_to(:scope1, :scope2),
         @existing

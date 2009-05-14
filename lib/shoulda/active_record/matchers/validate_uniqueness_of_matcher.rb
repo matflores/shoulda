@@ -103,9 +103,6 @@ module Shoulda # :nodoc:
           disallows_value_of(existing_value, @expected_message)
         end
 
-        # TODO:  There is a chance that we could change the scoped field
-        # to a value that's already taken.  An alternative implementation
-        # could actually find all values for scope and create a unique
         def validate_after_scope_change
           if @scopes.blank?
             true
@@ -116,7 +113,8 @@ module Shoulda # :nodoc:
               # Assume the scope is a foreign key if the field is nil
               previous_value ||= 0
 
-              next_value = previous_value.next
+              last_value = (@subject.class.find(:last, :order => scope) || @existing).send(scope)
+              next_value = (last_value || 0).next
 
               @subject.send("#{scope}=", next_value)
 
