@@ -285,7 +285,11 @@ module Shoulda
       self.should_eventuallys = []
       self.subcontexts        = []
 
-      merge_block(&blk)
+      if block_given?
+        merge_block(&blk)
+      else
+        merge_block { warn "[WARNING] Block missing for context '#{full_name}'" }
+      end
       Shoulda.remove_context
     end
 
