@@ -162,7 +162,7 @@ module Shoulda
     # <b>Just like should statements, a context block can exist next to normal <tt>def test_the_old_way; end</tt>
     # tests</b>.  This means you do not have to fully commit to the context/should syntax in a test file.
 
-    def context(name, &blk)
+    def context(name = '', &blk)
       if Shoulda.current_context
         Shoulda.current_context.context(name, &blk)
       else
@@ -293,7 +293,7 @@ module Shoulda
       blk.bind(self).call
     end
 
-    def context(name, &blk)
+    def context(name = '', &blk)
       self.subcontexts << Context.new(name, self, &blk)
     end
 

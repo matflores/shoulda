@@ -171,6 +171,18 @@ class ContextTest < ActiveSupport::TestCase # :nodoc:
       end
     end
   end
+
+  context do
+    context "context" do
+      context do
+        context "with no description" do
+          should "have name set right" do
+            assert_match(/^test: context with no description should have name set right/, self.to_s)
+          end
+        end
+      end
+    end
+  end
 end
 
 class Subject; end
